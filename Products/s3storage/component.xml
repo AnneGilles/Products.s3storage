@@ -3,38 +3,37 @@
 <!-- s3storage ZConfig section setup -->
 
 <component prefix="Products.s3storage.config">
-
   <sectiontype name="s3storage" implements="ZODB.storage"
-      datatype=".S3StorageDatatype">
+	       datatype=".S3StorageDatatype">
     <key name="name" default="S3 Storage" />
     <key name="aws_access_key_id" required="yes">
       <description>
-        ploneb
+        your access id
       </description>
     </key>
     <key name="aws_secret_access_key" required="yes">
       <description>
-	ploneb
+	your access key
       </description>
     </key>
     <key name="bucket_name" required="yes">
       <description>
-	ploneb
+	your bucket name
       </description>
     </key>
     <key name="host" required="yes">
       <description>
-	localhost
+	the S3 host 
       </description>
     </key>
     <key name="memcache_servers" required="yes">
       <description>
-	127.0.0.1:11211
+	your memcached host:port
       </description>
     </key>
   </sectiontype>
-
-<sectiontype name="s3_zodb" datatype=".S3ZODBDatabaseType"
-      implements="ZODB.database" extends="zodb" />
-
+  
+  <sectiontype name="s3_zodb" datatype=".S3ZODBDatabaseType"
+	       implements="ZODB.database" extends="zodb" />
+  
 </component>

@@ -5,7 +5,7 @@ import boto
 #from boto.key import Key
 from ZODB.utils import u64, p64, z64
 import time
-#from boto.exception import S3ResponseError
+from boto.exception import S3ResponseError
 #from boto.bucket import Bucket
 
 from boto.s3.connection import S3Connection
@@ -14,11 +14,14 @@ from boto.s3.connection import Bucket
 from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3.key import Key
 
-my_aws_access_key_id = 'ploneb'
-my_aws_secret_access_key = 'ploneb'
+# these need to be changed for your setup
+# TODO: read them from buildout-created etc/zope.conf
+my_aws_access_key_id = 'changeMe'
+my_aws_secret_access_key = 'changeMe'
+my_s3_host = 'changeMe'
+my_s3_port = 8091
+
 calling_format = OrdinaryCallingFormat()
-
-
 
 RETRIES = 5
 SLEEPTIME = 0.1
@@ -31,9 +34,9 @@ class S3Aspect:
         #conn = boto.connect_s3(aws_access_key_id, aws_secret_access_key)
         conn = S3Connection(aws_access_key_id = my_aws_access_key_id,
                             aws_secret_access_key = my_aws_secret_access_key,
-                            port=8091,
+                            port=my_s3_port,
                             calling_format = calling_format,
-                            host="localhost",
+                            host=my_s3_host,
                             path = "/",
                             is_secure=False)
         
@@ -90,7 +93,9 @@ class S3Aspect:
         for n in xrange(RETRIES):
             try:
                 return k.get_contents_as_string()
-            except S3ResponseError:
+            except S3ResponseError, s3e:
+                print " = = = = = = = S3ResponseError: = = = = = = = ="
+                print s3e
                 if DEBUG: print 'RETRY %s' % n
                 time.sleep(SLEEPTIME)
         return k.get_contents_as_string()
